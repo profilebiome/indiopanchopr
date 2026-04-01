@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Reproductor Musical Pro - Indio Pancho PR</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #000000; 
+            --surface-1: #111111;
+            --surface-2: #222222;
+            --surface-hover: #333333;
+            --accent: #ffffff; 
+            --accent-glow: rgba(255, 255, 255, 0.4);
+            --verified-blue: #3897f0;
+            --live-red: #ff0000; 
+            --text-primary: #ffffff; 
+            --text-secondary: #aaaaaa; 
+            --radius-lg: 24px;
+            --radius-md: 16px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-base);
+            font-family: 'Outfit', sans-serif;
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+        }
+
+        .bg-video {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            object-fit: cover; z-index: -1; opacity: 0.6;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 800px;
+            margin: auto;
+            background: rgba(10, 10, 10, 0.75); 
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            padding-bottom: 2rem;
+        }
+
+        /* HEADER */
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Contenedor para la foto de perfil */
+        .profile-pic-container {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 2px solid var(--accent);
+            box-shadow: 0 0 15px var(--accent-glow);
+            overflow: hidden; 
+            background-color: #000; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0; 
+        }
+
+        .profile-pic {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; 
+            object-position: center; 
+        }
+
+        .profile-name { 
+            font-size: 1.4rem; 
+            font-weight: 700; 
+            letter-spacing: -0.5px; 
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .verified-badge {
+            width: 18px;
+            height: 18px;
+            fill: var(--verified-blue);
+        }
+
+        .yt-bio-btn {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: #f00; color: #fff; text-decoration: none;
+            font-size: 0.75rem; font-weight: 700; padding: 6px 14px;
+            border-radius: 50px; margin-top: 8px; transition: 0.3s;
+        }
+
+        /* PLAYER SECTION */
+        .player-section { padding: 1.5rem; }
+
+        .video-wrapper {
+            background: #000;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            aspect-ratio: 16 / 9;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        iframe { width: 100%; height: 100%; border: none; }
+
+        /* FOOTER */
+        .player-footer {
+            margin-top: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.2rem;
+        }
+
+        .now-playing-info { text-align: center; width: 100%; }
+
+        .now-playing-label {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-secondary);
+            margin-bottom: 0.4rem;
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+        }
+
+        .live-dot {
+            width: 7px; height: 7px; background: var(--live-red);
+            border-radius: 50%; box-shadow: 0 0 8px var(--live-red);
+        }
+
+        .now-playing-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.3;
+        }
+
+        @media (max-width: 480px) {
+            .profile-header { padding: 1.2rem; }
+            .profile-pic-container { width: 60px; height: 60px; }
+            .now-playing-title { font-size: 1.1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<video autoplay muted loop playsinline class="bg-video">
+    <source src="https://i.imgur.com/S218JZv.mp4" type="video/mp4">
+</video>
+
+<div class="app-container">
+    <header class="profile-header">
+        <div class="profile-pic-container">
+            <img src="https://res.cloudinary.com/drpmze78g/image/upload/q_auto/f_auto/v1774917584/IMG_20260330_203137_097_klc80s.jpg" alt="Indio Pancho PR" class="profile-pic">
+        </div>
+        
+        <div class="profile-info">
+            <h1 class="profile-name">
+                Indio Pancho PR
+                <svg class="verified-badge" viewBox="0 0 24 24">
+                    <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                </svg>
+            </h1>
+            <a href="https://youtube.com/@lajaoficiall?si=64Elhe-pAKB9D8Ow" target="_blank" class="yt-bio-btn">SUSCRIBIRSE</a>
+        </div>
+    </header>
+
+    <main class="player-section">
+        <div class="video-wrapper">
+            <iframe id="youtubePlayer" src="https://www.youtube-nocookie.com/embed/QbzPFvOpw_s?rel=0&modestbranding=1" title="YouTube" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+        
+        <div class="player-footer">
+            <div class="now-playing-info">
+                <div class="now-playing-label"><span class="live-dot"></span> Lanzamiento Oficial</div>
+                <div class="now-playing-title" id="nowPlayingTitle">Cargando título...</div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    const videoId = "QbzPFvOpw_s";
+    const titleElement = document.getElementById('nowPlayingTitle');
+
+    async function fetchVideoTitle() {
+        try {
+            const response = await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId}`);
+            const data = await response.json();
+            titleElement.innerText = data.title || "Video Oficial";
+        } catch (error) {
+            titleElement.innerText = "Video Oficial";
+        }
+    }
+
+    fetchVideoTitle();
+</script>
+</body>
+</html>
